@@ -153,7 +153,7 @@ class AirSensorThread : public chibios_rt::BaseStaticThread<1024>
 
 public:
     AirSensorThread() :
-        driver_(&SPID3, GPIO_PORT_BAROMETER_CHIP_SELECT, GPIO_PIN_BAROMETER_CHIP_SELECT)
+        driver_(&SPID3, (GPIO_TypeDef*)GPIO_PORT_BAROMETER_CHIP_SELECT, GPIO_PIN_BAROMETER_CHIP_SELECT)
     { }
 
     virtual ~AirSensorThread() { }

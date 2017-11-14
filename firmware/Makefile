@@ -79,12 +79,12 @@ USE_PROCESS_STACKSIZE    := 0x0800
 BUILD_CONFIG = 1
 BUILD_CHIBIOS_SHELL = 1
 
-BOOTLOADER_SIZE = 32768
+BOOTLOADER_SIZE = 65536
 
 DDEFS += -DCORTEX_VTOR_INIT=$(BOOTLOADER_SIZE)            \
          -DCRT1_AREAS_NUMBER=0
 
-SERIAL_CLI_PORT_NUMBER = 3
+SERIAL_CLI_PORT_NUMBER = 1
 
 CPPWARN := -Wundef -Wno-error=undef
 
@@ -138,4 +138,4 @@ $(BOOTLOADER_IMAGE):
 upload: build/compound.elf
 	./zubax_chibios/tools/blackmagic_flash.sh
 
-include zubax_chibios/rules_stm32f105_107.mk
+include zubax_chibios/rules_stm32f446.mk

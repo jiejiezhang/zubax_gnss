@@ -23,7 +23,7 @@
 
 MEMORY
 {
-    flash : org = 0x08008000, len = 222k    /* 32K for bootloader, 2K for configs */
+    flash : org = 0x08010000, len = 222k    /* 32K for bootloader, 2K for configs */
     ram   : org = 0x20000100, len = 65280   /* First 256 bytes are reserved for bootloader/app communication */
 }
 

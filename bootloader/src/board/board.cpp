@@ -26,13 +26,43 @@
 /**
  * GPIO config for ChibiOS PAL driver
  */
-const PALConfig pal_default_config =
-{
-    { VAL_GPIOAODR, VAL_GPIOACRL, VAL_GPIOACRH },
-    { VAL_GPIOBODR, VAL_GPIOBCRL, VAL_GPIOBCRH },
-    { VAL_GPIOCODR, VAL_GPIOCCRL, VAL_GPIOCCRH },
-    { VAL_GPIODODR, VAL_GPIODCRL, VAL_GPIODCRH },
-    { VAL_GPIOEODR, VAL_GPIOECRL, VAL_GPIOECRH }
+const PALConfig pal_default_config = {
+#if STM32_HAS_GPIOA
+  {VAL_GPIOA_MODER, VAL_GPIOA_OTYPER, VAL_GPIOA_OSPEEDR, VAL_GPIOA_PUPDR,
+   VAL_GPIOA_ODR,   VAL_GPIOA_AFRL,   VAL_GPIOA_AFRH},
+#endif
+#if STM32_HAS_GPIOB
+  {VAL_GPIOB_MODER, VAL_GPIOB_OTYPER, VAL_GPIOB_OSPEEDR, VAL_GPIOB_PUPDR,
+   VAL_GPIOB_ODR,   VAL_GPIOB_AFRL,   VAL_GPIOB_AFRH},
+#endif
+#if STM32_HAS_GPIOC
+  {VAL_GPIOC_MODER, VAL_GPIOC_OTYPER, VAL_GPIOC_OSPEEDR, VAL_GPIOC_PUPDR,
+   VAL_GPIOC_ODR,   VAL_GPIOC_AFRL,   VAL_GPIOC_AFRH},
+#endif
+#if STM32_HAS_GPIOD
+  {VAL_GPIOD_MODER, VAL_GPIOD_OTYPER, VAL_GPIOD_OSPEEDR, VAL_GPIOD_PUPDR,
+   VAL_GPIOD_ODR,   VAL_GPIOD_AFRL,   VAL_GPIOD_AFRH},
+#endif
+#if STM32_HAS_GPIOE
+  {VAL_GPIOE_MODER, VAL_GPIOE_OTYPER, VAL_GPIOE_OSPEEDR, VAL_GPIOE_PUPDR,
+   VAL_GPIOE_ODR,   VAL_GPIOE_AFRL,   VAL_GPIOE_AFRH},
+#endif
+#if STM32_HAS_GPIOF
+  {VAL_GPIOF_MODER, VAL_GPIOF_OTYPER, VAL_GPIOF_OSPEEDR, VAL_GPIOF_PUPDR,
+   VAL_GPIOF_ODR,   VAL_GPIOF_AFRL,   VAL_GPIOF_AFRH},
+#endif
+#if STM32_HAS_GPIOG
+  {VAL_GPIOG_MODER, VAL_GPIOG_OTYPER, VAL_GPIOG_OSPEEDR, VAL_GPIOG_PUPDR,
+   VAL_GPIOG_ODR,   VAL_GPIOG_AFRL,   VAL_GPIOG_AFRH},
+#endif
+#if STM32_HAS_GPIOH
+  {VAL_GPIOH_MODER, VAL_GPIOH_OTYPER, VAL_GPIOH_OSPEEDR, VAL_GPIOH_PUPDR,
+   VAL_GPIOH_ODR,   VAL_GPIOH_AFRL,   VAL_GPIOH_AFRH},
+#endif
+#if STM32_HAS_GPIOI
+  {VAL_GPIOI_MODER, VAL_GPIOI_OTYPER, VAL_GPIOI_OSPEEDR, VAL_GPIOI_PUPDR,
+   VAL_GPIOI_ODR,   VAL_GPIOI_AFRL,   VAL_GPIOI_AFRH}
+#endif
 };
 
 /// Provided by linker
@@ -40,6 +70,28 @@ const extern std::uint8_t DeviceSignatureStorage[];
 
 namespace board
 {
+
+
+#define PAL_STM32_ALTERNATE(n)          ((n) << 7U)
+
+#define PAL_MODE_ALTERNATE(n)           (PAL_STM32_MODE_ALTERNATE |         \
+                                         PAL_STM32_ALTERNATE(n))
+
+#if 0
+static THD_WORKING_AREA(waThread1, 128);
+static THD_FUNCTION(Thread1, arg) {
+  (void)arg;
+  chRegSetThreadName("blinker");
+  while (true) {
+	palWritePad(GPIOF, 9, 0);
+	palWritePad(GPIOF, 10, 1);
+	chThdSleepMilliseconds(500);
+	palWritePad(GPIOF, 9, 1);
+	palWritePad(GPIOF, 10, 0);
+	chThdSleepMilliseconds(500);
+  }
+}
+#endif
 
 os::watchdog::Timer init(unsigned wdt_timeout_ms)
 {
@@ -49,6 +101,10 @@ os::watchdog::Timer init(unsigned wdt_timeout_ms)
     halInit();
     chSysInit();
     sdStart(&STDOUT_SD, nullptr);
+
+#if 0
+	chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+#endif
 
     /*
      * Watchdog
@@ -61,7 +117,7 @@ os::watchdog::Timer init(unsigned wdt_timeout_ms)
      * Version check
      */
     const auto hw_ver = detectHardwareVersion();
-
+#if 0
     if (hw_ver.major != 2)
     {
         chibios_rt::System::halt("BAD HW");
@@ -71,6 +127,7 @@ os::watchdog::Timer init(unsigned wdt_timeout_ms)
     {
         chibios_rt::System::halt("BAD HW");
     }
+#endif
 
     /*
      * Hardware
@@ -155,7 +212,7 @@ void bootApplication()
     // Deinit all peripherals that may have been used
     // It is crucial to disable ALL peripherals, else a spurious interrupt will crash the application
     RCC->APB1RSTR |= RCC_APB1RSTR_CAN1RST | RCC_APB1RSTR_CAN2RST | RCC_APB1RSTR_USART3RST;
-    RCC->AHBRSTR |= RCC_AHBRSTR_OTGFSRST;
+    RCC->AHB1RSTR |= RCC_AHB2RSTR_OTGFSRST;
 
     // Kill the sys tick
     SysTick->CTRL = 0;
@@ -249,8 +306,11 @@ void __early_init(void)
     stm32_clock_init();
 }
 
+#define PAL_MODE_STM32_ALTERNATE_PUSHPULL   16
+#define PAL_MODE_STM32_ALTERNATE_OPENDRAIN  17
 void boardInit(void)
 {
+#if 0
     uint32_t mapr = AFIO->MAPR;
     mapr &= ~AFIO_MAPR_SWJ_CFG; // these bits are write-only
 
@@ -258,7 +318,14 @@ void boardInit(void)
     mapr |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
 
     AFIO->MAPR = mapr | AFIO_MAPR_CAN_REMAP_REMAP2;
+#endif
 
+	palSetPadMode(GPIOF, 9, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);	//led
+	palSetPadMode(GPIOF, 10, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
+
+	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7)); //uart
+  	palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));
+	
     /*
      * Enabling the CAN controllers, then configuring GPIO functions for CAN_TX.
      * Order matters, otherwise the CAN_TX pins will twitch, disturbing the CAN bus.
