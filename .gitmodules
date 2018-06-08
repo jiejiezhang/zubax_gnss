@@ -1,6 +1,6 @@
 [submodule "firmware/zubax_chibios"]
 	path = firmware/zubax_chibios
-	url = https://github.com/Zubax/zubax_chibios
+	url = https://github.com/zwx230741/zubax_chibios.git
 [submodule "firmware/libuavcan"]
 	path = firmware/libuavcan
 	url = https://github.com/UAVCAN/libuavcan
