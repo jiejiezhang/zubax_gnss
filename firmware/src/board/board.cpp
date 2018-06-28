@@ -170,8 +170,25 @@ void boardInit(void)
 
     // Enable SWJ only, JTAG is not needed at all:
     mapr |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+	
+    mapr |= AFIO_MAPR_USART2_REMAP;
 
-    AFIO->MAPR = mapr;
+    mapr |= AFIO_MAPR_USART3_REMAP_PARTIALREMAP;
+
+    AFIO->MAPR = mapr | AFIO_MAPR_CAN_REMAP_REMAP3;
+
+    palSetPadMode(GPIOE, 13, 6);
+    palSetPadMode(GPIOE, 14, 6);
+    palSetPadMode(GPIOE, 15, 6);
+
+    palSetPadMode(GPIOD, 5, PAL_MODE_STM32_ALTERNATE_PUSHPULL); //16 TX PAL_MODE_STM32_ALTERNATE_PUSHPULL
+    palSetPadMode(GPIOD, 6, 3);    //17 RX PAL_MODE_INPUT_PULLUP
+
+	palSetPadMode(GPIOC, 10, PAL_MODE_STM32_ALTERNATE_PUSHPULL); //16 TX PAL_MODE_STM32_ALTERNATE_PUSHPULL
+    palSetPadMode(GPIOC, 11, 3);    //17 RX PAL_MODE_INPUT_PULLUP
+
+	RCC->APB1ENR |= RCC_APB1ENR_CAN1EN;
+    palSetPadMode(GPIOD, 1, PAL_MODE_STM32_ALTERNATE_PUSHPULL);
 }
 
 }

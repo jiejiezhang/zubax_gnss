@@ -6,9 +6,11 @@
 
 #pragma once
 
-#define STM32_HSECLK            8000000
+#define STM32_HSECLK            25000000
 
 #define STM32F10X_CL
+
+#define DEBUG_BUILD 1
 
 /*
  * GPIO
@@ -18,14 +20,14 @@
 #define GPIO_PIN_SERIAL_RX      10
 
 // LED
-#define GPIO_PORT_LED_STATUS    GPIOB
-#define GPIO_PIN_LED_STATUS     0
+#define GPIO_PORT_LED_STATUS    GPIOE
+#define GPIO_PIN_LED_STATUS     13
 
-#define GPIO_PORT_LED_CAN1      GPIOC
-#define GPIO_PIN_LED_CAN1       5
+#define GPIO_PORT_LED_CAN1      GPIOE
+#define GPIO_PIN_LED_CAN1       15
 
-#define GPIO_PORT_LED_CAN2      GPIOC
-#define GPIO_PIN_LED_CAN2       4
+#define GPIO_PORT_LED_CAN2      GPIOE
+#define GPIO_PIN_LED_CAN2       14
 
 /*
  * I/O ports initial setup, this configuration is established soon after reset
@@ -51,21 +53,21 @@
  * Please refer to the STM32 Reference Manual for details.
  */
 
-#define VAL_GPIOACRL            0x88888B88      // 7..0
-#define VAL_GPIOACRH            0x888B88b3      // 15..8
-#define VAL_GPIOAODR            0x00000000
+#define VAL_GPIOACRL            0x88888888                      // 7..0
+#define VAL_GPIOACRH            0x88800888                      // 15..8
+#define VAL_GPIOAODR            0xFFFFFFFF                      // SWDIO and chip select pull up
 
-#define VAL_GPIOBCRL            0x88888882
-#define VAL_GPIOBCRH            0x88B8FF88
-#define VAL_GPIOBODR            0x00000000
+#define VAL_GPIOBCRL            0x88222888
+#define VAL_GPIOBCRH            0x88488A48
+#define VAL_GPIOBODR            0xFFFFFFFF
 
-#define VAL_GPIOCCRL            0x88228888
+#define VAL_GPIOCCRL            0x88888888
 #define VAL_GPIOCCRH            0x88888888
-#define VAL_GPIOCODR            0x00000000
+#define VAL_GPIOCODR            0xFFFFFFFF
 
 #define VAL_GPIODCRL            0x88888888
 #define VAL_GPIODCRH            0x88888888
-#define VAL_GPIODODR            0x00000000
+#define VAL_GPIODODR            0xFFFFFFFF
 
 #define VAL_GPIOECRL            0x88888888
 #define VAL_GPIOECRH            0x88888888

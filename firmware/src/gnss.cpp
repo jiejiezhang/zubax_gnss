@@ -23,7 +23,7 @@ namespace gnss
 namespace
 {
 
-SerialDriver* const serial_port = &SD2;
+SerialDriver* const serial_port = &SD3;
 
 zubax_chibios::config::Param<float> param_gnss_fix_rate("gnss_fix_rate_hz", 10.0, 0.5, 15.0);
 zubax_chibios::config::Param<float> param_gnss_aux_rate("gnss_aux_rate_hz", 1.0,  0.1, 1.0);

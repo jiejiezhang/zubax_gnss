@@ -50,7 +50,7 @@ UDEFS += -DGIT_HASH=0x$(GIT_HASH)
 # ChibiOS
 #
 
-SERIAL_CLI_PORT_NUMBER = 1
+SERIAL_CLI_PORT_NUMBER = 2
 
 RELEASE_OPT = -Os -fomit-frame-pointer
 DEBUG_OPT = -Os -g3
